@@ -1,0 +1,14 @@
+{
+  "name": "css3-transform-generator",
+  "version": "1.0",
+  "homepage": "https://github.com/AsherWang/css3-transform-generator",
+  "authors": [
+    "AsherWang <1057488870@qq.com>"
+  ],
+  "description": "sass mixin used like @include k-transforms((rotate 23),(translate x y),...) to generate a matrix transform",
+  "main": "css3-transform-generator.scss",
+  "keywords": [
+    "sass"
+  ],
+  "license": "MIT"
+}
