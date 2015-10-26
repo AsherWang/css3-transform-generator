@@ -1,6 +1,6 @@
 {
   "name": "css3-transform-generator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/AsherWang/css3-transform-generator",
   "authors": [
     "AsherWang <1057488870@qq.com>"
@@ -11,9 +11,9 @@
     "sass"
   ],
   "ignore": [
-  "test",
-  "*.md",
-  "package.json"
-],
+    "test",
+    "*.md",
+    "package.json"
+  ],
   "license": "MIT"
 }
