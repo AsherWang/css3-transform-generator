@@ -10,5 +10,10 @@
   "keywords": [
     "sass"
   ],
+  "ignore": [
+  "test",
+  "*.md",
+  "package.json"
+],
   "license": "MIT"
 }
