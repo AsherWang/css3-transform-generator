@@ -11,7 +11,7 @@
 
 @function k-abs($x) {
     @if $x<0 {
-        $x: -$x;
+        @return -$x;
     }
     @return $x;
 }
@@ -25,8 +25,7 @@
 }
 
 @function k-cos($deg) {
-    $PI: 3.141592553;
-    $d: $deg/180*$PI;
+    $d: $deg/180*k-pi();
     $d: $d*$d;
     $ret: 1;
     $n: 1;
@@ -39,8 +38,7 @@
 }
 
 @function k-sin($deg) {
-    $PI: 3.141592553;
-    $d: $deg/180*$PI;
+    $d: $deg/180*k-pi();
     $ret: $d;
     $d: $d*$d;
     $n: $ret;
@@ -56,7 +54,7 @@
     @return k-sin($deg)/k-cos($deg);
 }
 
-// retrn the value of a matrix in row $row ,col $col
+// return the value of a matrix in row $row ,col $col
 @function k-matrix($matrix,$row,$col) {
     @return nth(nth($matrix, $row), $col);
 }
