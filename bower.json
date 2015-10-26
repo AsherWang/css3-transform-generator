@@ -11,6 +11,7 @@
     "sass"
   ],
   "ignore": [
+    ".gitignore",
     "test",
     "*.md",
     "package.json"
