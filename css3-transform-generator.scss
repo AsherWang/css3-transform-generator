@@ -93,6 +93,20 @@
     @return (($matrix11 $matrix12 $matrix13), ($matrix21 $matrix22 $matrix23), ($matrix31 $matrix32 $matrix33));
 }
 
+@function k-do-matrix($init_matrix,$position,$transform_matrix)
+{
+    $cur_positionX:nth($position,1);
+    $cur_positionY:nth($position,2);
+    //first pull it to 0，0
+    $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
+    //secondly do the transform
+    $init_matrix: k-matrix-multiplier($init_matrix,$transform_matrix);
+    //finally pull it back
+    @return k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+}
+
+
+
 // $matrix is like ((1 2 3 4),(1 2 3 4)) for [1 2 3 4, 1 2 3 4]
 // make sure the two matrix could be join together
 @function k-matrix3d-multiplier-tool($matrix1,$matrix2,$row,$col) {
@@ -160,61 +174,21 @@
             $r: nth($transform, 2);
             $cos: k-cos($r);
             $sin: k-sin($r);
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, (($cos $sin 0), (0-$sin $cos 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), (($cos $sin 0), (0-$sin $cos 0), (0 0 1)));
         } @else if nth($transform,1) == scale {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((nth($transform, 2) 0 0), (0 nth($transform, 3) 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((nth($transform, 2) 0 0), (0 nth($transform, 3) 0), (0 0 1)));
         } @else if nth($transform,1) == scaleX {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((nth($transform, 2) 0 0), (0 1 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((nth($transform, 2) 0 0), (0 1 0), (0 0 1)));
         } @else if nth($transform,1) == scaleY {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 nth($transform, 2) 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((1 0 0), (0 nth($transform, 2) 0), (0 0 1)));
         } @else if nth($transform,1) == skew {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 k-tan(nth($transform, 3)) 0), (k-tan(nth($transform, 2)) 1 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((1 k-tan(nth($transform, 3)) 0), (k-tan(nth($transform, 2)) 1 0), (0 0 1)));
         } @else if nth($transform,1) == skewX {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (k-tan(nth($transform, 2)) 1 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((1 0 0), (k-tan(nth($transform, 2)) 1 0), (0 0 1)));
         } @else if nth($transform,1) == skewY {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 k-tan(nth($transform, 2)) 0), (0 1 0), (0 0 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((1 k-tan(nth($transform, 2)) 0), (0 1 0), (0 0 1)));
         } @else if nth($transform,1) == matrix {
-            //first pull it to 0，0
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), (0-$cur_positionX 0-$cur_positionY 1)));
-            //secondly do the transform
-            $init_matrix: k-matrix-multiplier($init_matrix, ((nth($transform, 2) nth($transform, 3) 0), (nth($transform, 4) nth($transform, 5) 0), (nth($transform, 6) nth($transform, 7) 1)));
-            //finally pull it back
-            $init_matrix: k-matrix-multiplier($init_matrix, ((1 0 0), (0 1 0), ($cur_positionX $cur_positionY 1)));
+            $init_matrix: k-do-matrix($init_matrix,($cur_positionX $cur_positionY), ((nth($transform, 2) nth($transform, 3) 0), (nth($transform, 4) nth($transform, 5) 0), (nth($transform, 6) nth($transform, 7) 1)));
         }
     }
     @include k-transform(matrix(k-matrix-param($init_matrix)));
